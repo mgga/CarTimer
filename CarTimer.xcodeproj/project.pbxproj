@@ -81,6 +81,7 @@
 				3CFE498C216B4E280053BD30 /* CarTimerTests */,
 				3CFE4997216B4E280053BD30 /* CarTimerUITests */,
 				3CFE4976216B4E270053BD30 /* Products */,
+				3CFE49A6216B86FB0053BD30 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +124,13 @@
 				3CFE499A216B4E280053BD30 /* Info.plist */,
 			);
 			path = CarTimerUITests;
+			sourceTree = "<group>";
+		};
+		3CFE49A6216B86FB0053BD30 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +201,11 @@
 				TargetAttributes = {
 					3CFE4974216B4E260053BD30 = {
 						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					3CFE4988216B4E280053BD30 = {
 						CreatedOnToolsVersion = 10.0;
@@ -442,7 +455,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = miguel.almeida.CarTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -460,7 +473,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = miguel.almeida.CarTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

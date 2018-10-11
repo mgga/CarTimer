@@ -96,8 +96,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 //acceleration.text = String(format: "%.2f",sqrt(pow(vACCx,2) + pow(vACCy,2))*3.6)
                 filterV.text = String(format: "%.1f",sqrt(pow(vFx,2)+pow(vFy,2))*3.6)
             
-            } else{
-                
             }
         }
     }
@@ -189,7 +187,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             let perrorR = errorR
             errorR = userLocation.speed-sqrt(pow(vFx,2)+pow(vFy,2))
-            if (perrorR > errorR){ gCoutOut -= 0.001}else{ gCoutOut += 0.001}
+            //if (perrorR > errorR){ gCoutOut -= 0.001}else{ gCoutOut += 0.001}
             vFx = vGPSx
             vFy = vGPSy
             acceleration.text =  String(format: "%.1f",errorR)

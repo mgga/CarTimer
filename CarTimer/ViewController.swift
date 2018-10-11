@@ -16,11 +16,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var longitude: UILabel!
     @IBOutlet weak var hAccuracy: UILabel!
     @IBOutlet weak var altitude: UILabel!    
-    @IBOutlet weak var vAccuracy: UILabel!
+    @IBOutlet weak var gCoutOutValue: UILabel!
     @IBOutlet weak var distance: UILabel!
     @IBOutlet weak var speed: UILabel!
     @IBOutlet weak var acceleration: UILabel!
+
     
+    
+    @IBOutlet weak var tNorth: UISwitch!
     @IBOutlet weak var filterV: UILabel!
     
     
@@ -29,19 +32,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     let motionManager = CMMotionManager()
     var timer: Timer!
     
-    let RC = 0.0525
-    
     let dt = 0.1
-    var vx = 0.0
-    var vy = 0.0
-    var vz = 0.0
-    var ax = 0.0
-    var ay = 0.0
-    var az = 0.0
     
+    var errorR = 0.0
+  
     var date = Date()
     
-    var oldAcc = 0.0
+    var alphaACC = 0.0
+    var alphaGPS = 1.0
+    var gCoutOut = 0.0
+    
+    var vGPSx = 0.0
+    var vGPSy = 0.0
+    
+    var vACCx = 0.0
+    var vACCy = 0.0
+    
+    var vFx = 0.0
+    var vFy = 0.0
+    
     var velAcc = 0.0
     var velGPS = 0.0
     var vel = 0.0
@@ -49,13 +58,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //motionManager.startAccelerometerUpdates()
-        //motionManager.startGyroUpdates()
-        //motionManager.startMagnetometerUpdates()
-        motionManager.startDeviceMotionUpdates()
-        
-        
-        
+        motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical )
         timer = Timer.scheduledTimer(timeInterval: dt, target: self, selector: #selector(ViewController.update), userInfo: nil, repeats: true)
         
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -64,51 +67,71 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         startLocation = nil
+        
+        filterV.text = String(format: "%.1f",sqrt(pow(vFx,2)+pow(vFy,2))*3.6)
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     @objc func update() {
-        /*
-        print("update")
-        if let accelerometerData = motionManager.accelerometerData {
-            print(accelerometerData)
-        }
-        if let gyroData = motionManager.gyroData {
-            print(gyroData)
-        }
-        if let magnetometerData = motionManager.magnetometerData {
-            print(magnetometerData)
-        }*/
+        
         if let deviceMotion = motionManager.deviceMotion {
             
             
             //print(deviceMotion)
-            
-            vx+=(deviceMotion.userAcceleration.x-ax)*dt*9.8
-            vy+=(deviceMotion.userAcceleration.y-ay)*dt*9.8
-            vz+=(deviceMotion.userAcceleration.z-az)*dt*9.8
-            
-            ax = deviceMotion.userAcceleration.x
-            ay = deviceMotion.userAcceleration.y
-            az = deviceMotion.userAcceleration.z
+            if sqrt(pow(deviceMotion.userAcceleration.x,2)+pow(deviceMotion.userAcceleration.y,2)) > gCoutOut {
                 
-            //let acc = sqrt(pow(deviceMotion.userAcceleration.x,2) + pow(deviceMotion.userAcceleration.y,2) + pow(deviceMotion.userAcceleration.z,2))
+                //let accX = deviceMotion.userAcceleration.x*9.8*
+                //let accy =
+                
+                //vACCx+=(deviceMotion.userAcceleration.x)*dt*9.8
+                //vACCy+=(deviceMotion.userAcceleration.y)*dt*9.8
+                //vz+=(deviceMotion.userAcceleration.z)*dt*9.8
+                
+                
+                //vFx = alphaACC*vACCx+(1-alphaACC)*vFx
+                //vFy = alphaACC*vACCy+(1-alphaACC)*vFy
+                vFx += (deviceMotion.userAcceleration.x)*dt*9.8
+                vFy += (deviceMotion.userAcceleration.y)*dt*9.8
+                
+                //acceleration.text = String(format: "%.2f",sqrt(pow(vACCx,2) + pow(vACCy,2))*3.6)
+                filterV.text = String(format: "%.1f",sqrt(pow(vFx,2)+pow(vFy,2))*3.6)
             
-            //let alpha = dt / (dt + RC)
-            let alpha = 0.25
-            
-            velAcc = sqrt(pow(vx,2) + pow(vy,2) + pow(vz,2))
-            vel = alpha*velAcc+(1-alpha)*vel
-            acceleration.text = String(format: "%.2f",velAcc*3.6)
-            
-            filterV.text = String(format: "%.1f",vel*3.6)
+            } else{
+                
+            }
         }
     }
     
+    @IBAction func tNorthSwitch(_ sender: Any) {
+        if tNorth.isOn {
+            motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xTrueNorthZVertical )
+            print("True north On")
+            
+        }
+        else{
+            motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical )
+            print("True north Off")
+        }
+        
+    }
 
-
+    @IBAction func alphaGPSChange(_ sender: UISlider) {
+        alphaGPS = Double(sender.value)
+        print("AlphaGPS: %.2f", alphaGPS)
+        
+    }
+    @IBAction func alphaACCChange(_ sender: UISlider) {
+        alphaACC = Double(sender.value)
+        print("AlphaACC: %.2f", alphaACC)
+    }
+    @IBAction func GcoutOut(_ sender: UISlider) {
+        gCoutOut = Double(sender.value)
+        gCoutOutValue.text = String(format: "%.4f",gCoutOut)
+        //print("AlphaACC: %.2f", gCoutOut)
+    }
     @IBAction func resetDistance(_ sender: Any) {
-        startLocation = nil
+        reset()
+        
     }
     
     @IBAction func startWhenInUse(_ sender: Any) {
@@ -126,6 +149,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
     }
     
+    func reset(){
+        vFx = 0
+        vFy = 0
+        vACCx = 0
+        vACCy = 0
+        vGPSx = 0
+        vGPSy = 0
+        
+        
+        speed.text =  String(format: "%.1f",0.0)
+        acceleration.text = String(format: "%.1f",0.0)
+        filterV.text = String(format: "%.1f",0.0)
+        
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let userLocation = locations[locations.count - 1]
@@ -136,22 +174,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // manager.stopUpdatingLocation()
         latitude.text = String(format: "%.4f", userLocation.coordinate.latitude)
         longitude.text = String(format: "%.4f", userLocation.coordinate.longitude)
-        
         hAccuracy.text = String(format: "%.4f",userLocation.horizontalAccuracy)
-        vAccuracy.text = String(format: "%.4f",userLocation.verticalAccuracy)
+        altitude.text = String(format: "%.4f", userLocation.altitude)
+        //vAccuracy.text = String(format: "%.4f",userLocation.verticalAccuracy)
         
-        let deltaT =  userLocation.timestamp.timeIntervalSince(date)
-        date = userLocation.timestamp
+        //let deltaT =  userLocation.timestamp.timeIntervalSince(date)
+        //date = userLocation.timestamp
         
         //let alpha = deltaT / (deltaT + RC)
-        let alpha = 0.95
         
-        speed.text =  String(format: "%.2f",userLocation.speed*3.6)
-        altitude.text = String(format: "%.4f", userLocation.altitude)
+        if (userLocation.course >= 0){
+            vGPSx = userLocation.speed * cos(2.0*Double.pi - (userLocation.course*2.0*Double.pi)/360)
+            vGPSy = userLocation.speed * sin(2.0*Double.pi - (userLocation.course*2.0*Double.pi)/360)
+            
+            let perrorR = errorR
+            errorR = userLocation.speed-sqrt(pow(vFx,2)+pow(vFy,2))
+            if (perrorR > errorR){ gCoutOut -= 0.001}else{ gCoutOut += 0.001}
+            vFx = vGPSx
+            vFy = vGPSy
+            acceleration.text =  String(format: "%.1f",errorR)
+            speed.text =  String(format: "%.1f",userLocation.speed*3.6)
+            filterV.text = String(format: "%.1f",sqrt(pow(vFx,2)+pow(vFy,2))*3.6)
+        }
         
-        vel = alpha*userLocation.speed+(1-alpha)*vel
         
-        filterV.text = String(format: "%.1f",vel*3.6)
+        //filterV.text = String(format: "%.1f",sqrt(pow(vFx,2)+pow(vFy,2))*3.6)
         
     }
     

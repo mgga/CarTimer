@@ -14,6 +14,7 @@
 		3CFE4983216B4E280053BD30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFE4981216B4E280053BD30 /* LaunchScreen.storyboard */; };
 		3CFE498E216B4E280053BD30 /* CarTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFE498D216B4E280053BD30 /* CarTimerTests.swift */; };
 		3CFE4999216B4E280053BD30 /* CarTimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFE4998216B4E280053BD30 /* CarTimerUITests.swift */; };
+		3CFE49AA216C8B450053BD30 /* timeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFE49A9216C8B450053BD30 /* timeSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		3CFE4994216B4E280053BD30 /* CarTimerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarTimerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CFE4998216B4E280053BD30 /* CarTimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarTimerUITests.swift; sourceTree = "<group>"; };
 		3CFE499A216B4E280053BD30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CFE49A9216C8B450053BD30 /* timeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timeSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				3CFE4978216B4E270053BD30 /* AppDelegate.swift */,
+				3CFE49A9216C8B450053BD30 /* timeSheet.swift */,
 				3CFE497A216B4E270053BD30 /* ViewController.swift */,
 				3CFE497C216B4E270053BD30 /* Main.storyboard */,
 				3CFE497F216B4E280053BD30 /* Assets.xcassets */,
@@ -270,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3CFE497B216B4E270053BD30 /* ViewController.swift in Sources */,
+				3CFE49AA216C8B450053BD30 /* timeSheet.swift in Sources */,
 				3CFE4979216B4E270053BD30 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -444,9 +448,11 @@
 		3CFE499E216B4E280053BD30 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3K7C6ESZA;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				INFOPLIST_FILE = CarTimer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -462,9 +468,11 @@
 		3CFE499F216B4E280053BD30 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3K7C6ESZA;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				INFOPLIST_FILE = CarTimer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
